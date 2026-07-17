@@ -85,11 +85,6 @@
     <button id="dClean" data-d="clean" type="button">Clean</button>
     <button id="dPlan" data-d="plan" type="button">Floor&nbsp;plan</button>
   </div>
-  <p class="mini">Bathroom vanity <span style="opacity:.55;font-weight:600">· Proposed</span></p>
-  <div class="seg">
-    <button id="lS" class="on" data-l="south" type="button">South · 46″</button>
-    <button id="lN" data-l="north" type="button">North · ~72″</button>
-  </div>
   <div class="views">
     <button type="button" data-v="overview">Overview</button>
     <button type="button" data-v="bath">Bathroom</button>
@@ -117,7 +112,7 @@
     <li>The bathroom's own double-sink vanity (~46″, south wall next to the toilet) is shown staying in the same spot in the new design — confirm.</li>
     <li>New straight wall assumed flush with the flat (bathroom) side of the old curved assembly → bathroom gains ~5″.</li>
     <li>Bathroom ceiling now slopes north→south: high (122″) at the window/deck end, low (93″) at the hall end. The bathroom window is triangular, following that rake — tall at the north, tapering south.</li>
-    <li>Bathroom vanity has two switchable layouts (Proposed only): South ·46″ (current) or North ·~72″ (Option A — long double on the high-ceiling wall). Toilet, tub and shower stay put in both; the tub caps the north vanity near ~72″.</li>
+    <li>Bathroom vanity kept at its original ~46″ length so there's comfortable standing room at the sink; freestanding tub sits alongside it. Confirm final vanity length and clearances.</li>
     <li>Nook vanity is now a full-width makeup vanity (no plumbing): one big mirror, brass sconces, a center knee-space cutout, and a round stool. Brass here vs. black in the shower — confirm you're OK with mixed metals.</li>
     <li>Shower, toilet, window, and sauna unchanged in both views.</li>
   </ul>
@@ -469,33 +464,17 @@ box(gPro,XW,0,165.5,X2-XW,122,T,M.neu);   // new straight wall = high (122") nor
   f.position.set(183,16,189); gPro.add(f);
   box(gPro,182.2,29.5,189,1.6,1.6,8,M.chrome);
 })();
-// bathroom vanity — two switchable layouts: SOUTH wall (current) vs NORTH wall (Option A, longer)
-var gVanS=new THREE.Group(), gVanN=new THREE.Group(); gPro.add(gVanS,gVanN);
-// SOUTH layout — short double on the south wall (comfortable standing room by the tub)
-box(gVanS,126,0,248,38,4,20.5,M.dark);
-box(gVanS,124,4,248,42,30,20.5,M.oak);
-box(gVanS,122,34,246.5,46,2.5,22,M.counter);
-box(gVanS,126,44,267.4,17,26,1,M.mirror);
-box(gVanS,147,44,267.4,17,26,1,M.mirror);
+// bathroom vanity — short double on the south wall (comfortable standing room by the tub)
+box(gPro,126,0,248,38,4,20.5,M.dark);
+box(gPro,124,4,248,42,30,20.5,M.oak);
+box(gPro,122,34,246.5,46,2.5,22,M.counter);
+box(gPro,126,44,267.4,17,26,1,M.mirror);
+box(gPro,147,44,267.4,17,26,1,M.mirror);
 [135,153].forEach(function(bx){
   var rim=new THREE.Mesh(new THREE.CylinderGeometry(5.5,5.5,.8,24),M.basin);
-  rim.position.set(bx,36.9,257); rim.scale.z=1.15; gVanS.add(rim);
-  box(gVanS,bx-.8,36.5,264,1.6,6,1.6,M.chrome);
+  rim.position.set(bx,36.9,257); rim.scale.z=1.15; gPro.add(rim);
+  box(gPro,bx-.8,36.5,264,1.6,6,1.6,M.chrome);
 });
-floorLabel(gVanS,'VANITY · 46″',145,238,5.5);
-// NORTH-WALL layout (Option A) — long ~72″ double under the high ceiling
-box(gVanN,100,0,171,72,4,20,M.dark);
-box(gVanN,100,4,171,72,30,20,M.oak);
-box(gVanN,98,34,170,76,2.5,22,M.counter);
-[122,150].forEach(function(bx){
-  var rim=new THREE.Mesh(new THREE.CylinderGeometry(5.5,5.5,.8,24),M.basin);
-  rim.position.set(bx,36.9,181); rim.scale.z=1.15; gVanN.add(rim);
-  box(gVanN,bx-.8,36.5,172,1.6,6,1.6,M.chrome);        // faucet at the back (north wall)
-  box(gVanN,bx-13,40,169.5,26,30,1,M.dark);            // mirror frame
-  box(gVanN,bx-11,42,170,22,26,0.6,M.mirror);          // mirror glass
-});
-sprite(gVanN,'Option A — long ~72″ vanity on the north wall',136,46,182,6.5,'#8a4a2e');
-floorLabel(gVanN,'LONG VANITY ~72″ (Option A)',136,203,6);
 sprite(gPro,'New straight wall — bath gains ~5″',130,102,163,7,'#8a4a2e');
 sprite(gPro,'Freestanding tub 60″ × 27″ (narrower)',183,32,224,6.5,'#8a4a2e');
 sprite(gPro,'Wall flattened + shortened — hall & vanity open up',46,58,172,6.5,'#8a4a2e');
@@ -659,14 +638,6 @@ function setDisplay(m){
 ['dLab','dClean','dPlan'].forEach(function(id){
   $('#'+id).addEventListener('click',function(){ setDisplay($('#'+id).dataset.d); });
 });
-function setLayout(l){
-  gVanS.visible=(l==='south'); gVanN.visible=(l==='north');
-  $('#lS').classList.toggle('on',l==='south');
-  $('#lN').classList.toggle('on',l==='north');
-}
-$('#lS').addEventListener('click',function(){setLayout('south');});
-$('#lN').addEventListener('click',function(){setLayout('north');});
-setLayout('south');
 Array.prototype.forEach.call(document.querySelectorAll('.views button'),function(b){
   b.addEventListener('click',function(){flyTo(VIEWS[b.dataset.v]);});
 });
